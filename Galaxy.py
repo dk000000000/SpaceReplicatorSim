@@ -5,9 +5,7 @@ import numpy as np
 from GalaxyGeneration import generateDiskGalaxy
 
 
-x = length * np.cos(angle)
-y = length * np.sin(angle)
-class Galaxy()
+class Galaxy(object):
     self.agentlist = {} #dictionary of agents
     self.time = 0 # current time since the start
     self.ends = False
@@ -31,11 +29,12 @@ class Galaxy()
     def isEnds(self,evaluation):
         return evaluation or self.timelimit == self.time+1
     def agentAct(self,actionD):
-        
+        for a in actionD:
+            if self.check_block()
 
     def reset(self): # reset the galaxy, kill everyone
         pass
-    def check_block(self):
+    def check_block(self,agent):
         pass
     def render(self): #render what is hapenning in galaxy
         pass

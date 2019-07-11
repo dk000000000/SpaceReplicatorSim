@@ -2,21 +2,19 @@ from copy import copy, deepcopy
 
 class Agent(object):
 
-    systemsBeliefs = [] # list of n star systems each resource amount
+    self.systemsBeliefs = [] # list of n star systems each resource amount
 
-    pastPositions = [] # list of index of system they known have been to or other bots have been to
+    self.pastPositions = [] # list of index of system they known have been to or other bots have been to
 
-    charge = 100 # charge/Energy Amount -> 0 - 100
+    self.block = 0 # boolean if it is blocked
 
-    position = 0 # star system index in the universe
+    self.dead = False # out of charge
 
-    block = 0 # boolean if it is blocked
-
-    dead = False # out of charge
-
-    degradation = 0.2
-
-    recharge_speed = 0.4
+    def __init__(self,charge=100,position = 0,degradation = 0.01,recharge_speed=0.2):
+        self.charge = charge # charge/Energy Amount -> 0 - 100
+        self.position = position # star system index in the universe
+        self.degradation = degradation
+        self.recharge_speed = recharge_speed
 
     def _updateCharge(self, ope):
 
