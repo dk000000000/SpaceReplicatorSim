@@ -39,18 +39,22 @@ class Galaxy(object):
     def ifEnds(self,evaluation):
         return evaluation or self.timelimit == self.time+1
     def probeAct(self,actionD):
-        for probeId,action in actionD.items():
-            result = self.probelist[probeId].act(actionD[probeId])
-            if result=="replicate":#replicate
-                replica = deepcopy(self.probelist[probeId])
-                replica.id = self.Probecount
-                replica.system = self.probelist[probeId].system
-                replica.system.movein(replica.id)
-                self.probelist[replica.id] = replica
-                self.Probecount+=1
-            elif result:#move in another galaxy
-                self.probelist[probeId].system = self.systemlist[result]
-                self.probelist[probeId].system.movein(probeId)
+        for probeId,_ in self.probelist.items():
+            if probeId in actionD or self.probelist[probeId].blockAction:
+                result = self.probelist[probeId].act(actionD[probeId])
+                if result=="replicate":#replicate
+                    replica = deepcopy(self.probelist[probeId])
+                    replica.id = self.Probecount
+                    replica.system = self.probelist[probeId].system
+                    replica.system.movein(replica.id)
+                    self.probelist[replica.id] = replica
+                    self.Probecount+=1
+                elif result:#move in another galaxy
+                    self.probelist[probeId].system = self.systemlist[result]
+                    self.probelist[probeId].system.movein(probeId)
+            else:
+                self.probelist[probeId].act(["stay",0]])
+
     def sychronize(self):
         for _,system in self.systemlist.items():
             system.sychronize()

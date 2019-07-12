@@ -5,6 +5,8 @@ import numpy as np
 class Probe(object):
     def __init__(self,id,galaxy_positions,system,maxcharge,galaxy_dict,dist_matrix,charge=100,degradation = 0.01,recharge_speed=0.2,move_stay_ratio=2,moving_speed=0.01):
         self.block = -1 # boolean if it is blocked
+        self.blockAction = None
+
         self.dead = False # out of charge
         self.destination = None
         self.id = id #id of this probe
@@ -68,6 +70,7 @@ class Probe(object):
             self.destination = new_position
             distance = self._getDistance(self.current_position,self.destination)
             self.block = math.ceil(distance/self.moving_speed)-1
+            self.blockAction = "move"
             self.current_position = tuple(np.array(self.current_position) + self._getDirectionVector(self.destination))
             self.system.moveout(self.id)
         elif self.block == 0:
@@ -75,7 +78,9 @@ class Probe(object):
             if distance <= self.moving_speed: # last self.block should have moving speed higher than distance
                 self.current_position = self.destination
                 self.destination = None
+
             self.block-=1
+            self.blockAction = "move"
             return self.destination
         else:
             self.current_position = tuple(np.array(self.current_position) + self._getDirectionVector(self.destination))
@@ -88,9 +93,11 @@ class Probe(object):
         if self.block == -1:
             self._updateCharge("replicate")
             self.block = 0
+            self.blockAction="replicate"
             return "replicate"
-        else:
+        else:#block=0
             self.block-=1
+            self.blockAction = None
             self._updateCharge("stay")
         self.system.replicate(self.id)
 
