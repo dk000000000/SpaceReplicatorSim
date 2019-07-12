@@ -27,7 +27,7 @@ class Probe(object):
         return np.linalg.norm(np.array(position1)-np.array(position2))
 
     def _getDirectionVector(self,position2):
-        return (np.array(self.position)-np.array(position2))/self._getDistance(self.position,position2)
+        return (np.array(self.current_position)-np.array(position2))/self._getDistance(self.current_position,position2)
 
     def _updateCharge(self, act):
         if act == "recharge": #increase the different between recharge and degreadation
@@ -61,23 +61,23 @@ class Probe(object):
 
     def move(self, id):
         new_position = self.galaxy_positions[id]
-        self.pastPositions[self.id].append(self.position)
-        if block ==-1:
+        self.positions[self.id].append(self.current_position)
+        if self.block ==-1:
             self.destination = new_position
             distance = self._getDistance(self.current_position,self.destination)
-            block = math.ceil(distance/self.moving_speed)-1
-            self.position = self.current_position + self._direction_vector(self.destination)
+            self.block = math.ceil(distance/self.moving_speed)-1
+            self.current_position = self.current_position + self._direction_vector(self.destination)
             self.system.moveout(self.id)
-        elif block == 0:
+        elif self.block == 0:
             distance = self._getDistance(self.current_position,self.destination)
-            if distance <= self.moving_speed: # last block should have moving speed higher than distance
-                self.position = self.destination
+            if distance <= self.moving_speed: # last self.block should have moving speed higher than distance
+                self.current_position = self.destination
                 self.destination = None
-            block-=1
+            self.block-=1
             return self.destination
         else:
-            self.position = self.current_position + self._direction_vector(self.destination)
-            block-=1
+            self.current_position = self.current_position + self._direction_vector(self.destination)
+            self.block-=1
 
         self._updateCharge("move")
 
@@ -85,10 +85,10 @@ class Probe(object):
     def replicate(self):
         if self.block == -1:
             self._updateCharge("replicate")
-            block = 0
+            self.block = 0
             return "replicate"
         else:
-            block-=1
+            self.block-=1
             self._updateCharge("stay")
         self.system.replicate(self.id)
 
