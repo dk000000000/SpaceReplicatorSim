@@ -98,6 +98,7 @@ class Probe(object):
         self.destination =None
         self.block=-1
         self.blockAction = None
+        self.system.moveout(self.id)
 
 
     def replicate(self):
