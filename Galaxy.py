@@ -18,11 +18,13 @@ class Galaxy(object):
         positions,charges = generateDiskGalaxy(self.galaxySize,self.chargeMax)
         self.systemlist = {i:System(positions[i],charges[i]) for i in range(len(positions)) } #list of system
         self.systemPos = positions
+        self.systemDict = {positions[i]:i for i in range(len(positions))}
+
         self.distanceMatrix = cdist(np.array(self.systemPos),np.array(self.systemPos))
         self._init_sys()
     def _init_sys(self):
         chosen = self.systemlist[0]
-        self.probelist["0"]=Probe("0",self.systemPos,chosen,self.chargeMax)
+        self.probelist["0"]=Probe("0",self.systemPos,chosen,self.chargeMax,self.systemDict)
         self.Probecount = 0
 
     def step(self,actionD):

@@ -3,7 +3,7 @@ import math
 import numpy as np
 
 class Probe(object):
-    def __init__(self,id,galaxy_positions,system,maxcharge,charge=100,degradation = 0.01,recharge_speed=0.2,move_stay_ratio=2,moving_speed=0.01):
+    def __init__(self,id,galaxy_positions,system,maxcharge,galaxy_dict,charge=100,degradation = 0.01,recharge_speed=0.2,move_stay_ratio=2,moving_speed=0.01):
         self.block = -1 # boolean if it is blocked
         self.dead = False # out of charge
         self.destination = None
@@ -16,6 +16,7 @@ class Probe(object):
         self.galaxy_positions = galaxy_positions
         self.charge = charge # charge/Energy Amount -> 0 - 100
         self.current_position = system.position # star system index in the universe
+        self.galaxy_dict = galaxy_dict
         self.degradation = degradation #how fast it use resources
         self.recharge_speed = recharge_speed
         self.move_stay_ratio = move_stay_ratio
