@@ -20,6 +20,7 @@ class Probe(object):
         self.recharge_speed = recharge_speed
         self.move_stay_ratio = move_stay_ratio
         self.moving_speed = moving_speed
+        self.system.movein(self.id)
 
     def _getDistance(self,position1,position2=(0,0,0)):
         return np.linalg.norm(np.array(position1)-np.array(position2))
@@ -64,13 +65,14 @@ class Probe(object):
             distance = self._getDistance(self.current_position,self.destination)
             block = math.ceil(distance/self.moving_speed)-1
             self.position = self.current_position + self._direction_vector(self.destination)
-            self.system.
+            self.system.moveout(self.id)
         elif block == 0:
             distance = self._getDistance(self.current_position,self.destination)
             if distance <= self.moving_speed: # last block should have moving speed higher than distance
                 self.position = self.destination
                 self.destination = None
             block-=1
+            return self.destination
         else:
             self.position = self.current_position + self._direction_vector(self.destination)
             block-=1

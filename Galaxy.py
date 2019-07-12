@@ -37,12 +37,16 @@ class Galaxy(object):
     def probeAct(self,actionD):
         for probeId,action in actionD.items():
             result = self.probelist[probeId].act(actionD[probeId])
-            if result:#replicate
+            if result=="replicate":#replicate
                 replica = deepcopy(self.probelist[probeId])
                 replica.id = self.Probecount
                 replica.system = self.probelist[probeId].system
+                replica.system.movein(replica.id)
                 self.probelist[replica.id] = replica
                 self.Probecount+=1
+            elif result:#move in another galaxy
+                self.probelist[probeId].system = self.systemlist[result]
+                self.probelist[probeId].system.movein(probeId)
     def sychronize(self):
         for position,system in self.systemlist.items():
             system.sychronize()
