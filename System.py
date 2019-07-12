@@ -1,5 +1,5 @@
 class System(object):
-    def __init__(self,charge,position,max_system_charge=10^6):
+    def __init__(self,position,charge,max_system_charge=10**6):
         self.charge= charge #0-1M reourcse
         self.position = position #position in the galaxy
         self.max_system_charge=max_system_charge
@@ -9,8 +9,8 @@ class System(object):
     def sychronize(self):
         #combine all information pick
         #need to finish
-        ProbeBeliefs =[a.system_beliefs for a in self.agents]
-
+        #ProbeBeliefs =[a.system_beliefs for a in self.agents]
+        pass
     def moveout(self,agentid):
         self.agents.pop(agentid)
     def movein(self,agentid):

@@ -11,22 +11,23 @@ class Probe(object):
         # dict of list of position of system represented three number in the cartesian plane they known have been to or other bots have been to
         self.positions = {self.id:[system.position]} #{"1":[(0,0,0)]}
         # dict of n star systems each resource amount and how much the probe belives about the certainty of resource
-        self.system_beliefs = {p:[maxcharge*np.random.normal(self._getDistance(p)),0]for p in galaxy_positions} #{(0.2,0.2,0.2):[20000,0.8]} (0.2,0.2,0.2) position of the system 20000 is quantity of resource, 0.8 is the certainty of the beliefs
+        self.system_beliefs = {p:[maxcharge*np.random.normal(self._getDistance(p)),0] for p in galaxy_positions} #{(0.2,0.2,0.2):[20000,0.8]} (0.2,0.2,0.2) position of the system 20000 is quantity of resource, 0.8 is the certainty of the beliefs
         self.system_beliefs[system.position]=[system.charge,1]#absolutely sure about current system cahrge
-
+        self.galaxy_positions = galaxy_positions
         self.charge = charge # charge/Energy Amount -> 0 - 100
         self.current_position = system.position # star system index in the universe
         self.degradation = degradation #how fast it use resources
         self.recharge_speed = recharge_speed
         self.move_stay_ratio = move_stay_ratio
         self.moving_speed = moving_speed
+        self.system = system
         self.system.movein(self.id)
 
     def _getDistance(self,position1,position2=(0,0,0)):
         return np.linalg.norm(np.array(position1)-np.array(position2))
 
     def _getDirectionVector(self,position2):
-        return (np.array(self.position)-np.array(position2))/self._getDistance(self.position,position2)
+        return (np.array(self.current_position)-np.array(position2))/self._getDistance(self.current_position,position2)
 
     def _updateCharge(self, act):
         if act == "recharge": #increase the different between recharge and degreadation
@@ -58,24 +59,25 @@ class Probe(object):
     def isDead(self):
         return self.dead
 
-    def move(self, new_position):
-        self.pastPositions[self.id].append(self.position)
-        if block ==-1:
+    def move(self, id):
+        new_position = self.galaxy_positions[id]
+        self.positions[self.id].append(self.current_position)
+        if self.block ==-1:
             self.destination = new_position
             distance = self._getDistance(self.current_position,self.destination)
-            block = math.ceil(distance/self.moving_speed)-1
-            self.position = self.current_position + self._direction_vector(self.destination)
+            self.block = math.ceil(distance/self.moving_speed)-1
+            self.current_position = self.current_position + self._direction_vector(self.destination)
             self.system.moveout(self.id)
-        elif block == 0:
+        elif self.block == 0:
             distance = self._getDistance(self.current_position,self.destination)
-            if distance <= self.moving_speed: # last block should have moving speed higher than distance
-                self.position = self.destination
+            if distance <= self.moving_speed: # last self.block should have moving speed higher than distance
+                self.current_position = self.destination
                 self.destination = None
-            block-=1
+            self.block-=1
             return self.destination
         else:
-            self.position = self.current_position + self._direction_vector(self.destination)
-            block-=1
+            self.current_position = self.current_position + self._direction_vector(self.destination)
+            self.block-=1
 
         self._updateCharge("move")
 
@@ -83,10 +85,10 @@ class Probe(object):
     def replicate(self):
         if self.block == -1:
             self._updateCharge("replicate")
-            block = 0
+            self.block = 0
             return "replicate"
         else:
-            block-=1
+            self.block-=1
             self._updateCharge("stay")
         self.system.replicate(self.id)
 
