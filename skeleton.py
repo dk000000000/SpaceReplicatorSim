@@ -1,3 +1,5 @@
+from Galaxy import Galaxy
+from Probe import Probe
 from random import choice
 
 g = Galaxy()
@@ -27,21 +29,3 @@ def step(g):
     for k, p in pl.items():
         actionD[k] = decide(p)
     g.step(actionD)
-
-
-def __init__(self):
-    self.distanceMatrix = 0
-        self.planetId = 0
-
-
-
-    def greedy_action(self):
-        pass
-
-
-    def random_action(self,n):
-        planets = self.n_closest_planets_absolute(n)
-        int_random = randrange(n)
-        return planets[int_random]
-
-
