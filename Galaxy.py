@@ -53,7 +53,7 @@ class Galaxy(object):
                     self.probelist[probeId].system = self.systemlist[result]
                     self.probelist[probeId].system.movein(probeId)
             else:
-                self.probelist[probeId].act(["stay",0]])
+                self.probelist[probeId].act(["stay",0])
 
     def sychronize(self):
         for _,system in self.systemlist.items():

@@ -71,7 +71,7 @@ class Probe(object):
             distance = self._getDistance(self.current_position,self.destination)
             self.block = math.ceil(distance/self.moving_speed)-1
             self.blockAction = "move"
-            self.current_position = tuple(np.array(self.current_position) + self._getDirectionVector(self.destination))
+            self.current_position = tuple(np.array(self.current_position) - self._getDirectionVector(self.destination))
             self.system.moveout(self.id)
         elif self.block == 0:
             distance = self._getDistance(self.current_position,self.destination)
@@ -83,7 +83,7 @@ class Probe(object):
             self.blockAction = "move"
             return self.destination
         else:
-            self.current_position = tuple(np.array(self.current_position) + self._getDirectionVector(self.destination))
+            self.current_position = tuple(np.array(self.current_position) - self._getDirectionVector(self.destination))
             self.block-=1
 
         self._updateCharge("move")
