@@ -12,7 +12,7 @@ class System(object):
         #ProbeBeliefs =[a.system_beliefs for a in self.agents]
         pass
     def moveout(self,agentid):
-        self.agents.pop(agentid)
+        self.agents.pop(self.agents.index(agentid))
     def movein(self,agentid):
         self.agents.append(agentid)
         self.agentrecord["visit"]+=1
