@@ -12,3 +12,7 @@ class System(object):
 
     def record(self):
         pass
+
+    def reset(self):
+        self.agents = []
+        self.agentrecord = {}

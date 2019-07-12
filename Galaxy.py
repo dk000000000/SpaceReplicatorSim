@@ -37,7 +37,12 @@ class Galaxy(object):
             self.probelist[probeId].act(actionD[probeId])
 
     def reset(self): # reset the galaxy, kill everyone
-        pass
+        self.probelist = {}
+        for key,system in self.systemlist:
+            system.reset()
+        chosen = self.systemlist[list(self.systemlist.keys())[0]]
+        self.probelist["0"]=Probe("0",list(self.systemlist.keys()),chosen,self.chargeMax)
+
 
     def render(self): #render what is hapenning in galaxy
         pass
