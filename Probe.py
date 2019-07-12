@@ -64,6 +64,7 @@ class Probe(object):
             distance = self._getDistance(self.current_position,self.destination)
             block = math.ceil(distance/self.moving_speed)-1
             self.position = self.current_position + self._direction_vector(self.destination)
+            self.system.
         elif block == 0:
             distance = self._getDistance(self.current_position,self.destination)
             if distance <= self.moving_speed: # last block should have moving speed higher than distance
@@ -84,13 +85,16 @@ class Probe(object):
             block = 0
         else:
             block-=1
-        self.stay()
+            self._updateCharge("stay")
+        self.system.replicate(self.id)
         return ag
 
     def recharge(self):
+        self.system.recharge(self.id)
         self._updateCharge("recharge")
 
     def stay(self):
+        self.system.stay(self.id)
         self._updateCharge("stay")
 
     def act(self, action):

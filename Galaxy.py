@@ -25,6 +25,7 @@ class Galaxy(object):
     def step(self,actionD):
         #dictionary of action increment self.time and will return false self.timelimit is met, check_block() to block probe to act if it is blocked
         self.probeAct(actionD)
+        self.sychronize()
         evaluation = self.evaluate()
         self.ifEnds(evaluation)
         return self.probelist,self.ends, evaluation#boolean if is out of time limit
@@ -35,6 +36,10 @@ class Galaxy(object):
     def probeAct(self,actionD):
         for probeId,action in actionD.items():
             self.probelist[probeId].act(actionD[probeId])
+
+    def sychronize(self):
+        for position,system in self.systemlist.items():
+            system.sychronize()
 
     def reset(self): # reset the galaxy, kill everyone
         self.probelist = {}
