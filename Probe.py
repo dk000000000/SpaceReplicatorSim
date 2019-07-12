@@ -31,7 +31,7 @@ class Probe(object):
         return np.linalg.norm(np.array(position1)-np.array(position2))
 
     def _getDirectionVector(self,position2):
-        return (np.array(self.current_position)-np.array(position2))/self._getDistance(self.current_position,position2)
+        return (np.array(position2)-np.array(self.current_position))/self._getDistance(self.current_position,position2)
 
     def _updateCharge(self, act):
         if act == "recharge": #increase the different between recharge and degreadation
@@ -71,7 +71,7 @@ class Probe(object):
             distance = self._getDistance(self.current_position,self.destination)
             self.block = math.ceil(distance/self.moving_speed)-1
             self.blockAction = "move"
-            self.current_position = tuple(np.array(self.current_position) - self._getDirectionVector(self.destination))
+            self.current_position = tuple(np.array(self.current_position) + self.moving_speed*self._getDirectionVector(self.destination))
             self.system.moveout(self.id)
         elif self.block == 0:
             distance = self._getDistance(self.current_position,self.destination)
@@ -83,7 +83,7 @@ class Probe(object):
             self.blockAction = "move"
             return self.destination
         else:
-            self.current_position = tuple(np.array(self.current_position) - self._getDirectionVector(self.destination))
+            self.current_position = tuple(np.array(self.current_position) + self.moving_speed*self._getDirectionVector(self.destination))
             self.block-=1
 
         self._updateCharge("move")
