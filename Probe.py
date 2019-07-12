@@ -81,13 +81,12 @@ class Probe(object):
     def replicate(self):
         if self.block == -1:
             self._updateCharge("replicate")
-            ag = copy(self)
             block = 0
+            return "replicate"
         else:
             block-=1
             self._updateCharge("stay")
         self.system.replicate(self.id)
-        return ag
 
     def recharge(self):
         self.system.recharge(self.id)
@@ -105,4 +104,4 @@ class Probe(object):
         elif action[0] == "recharge":
             self.recharge()
         elif action[0] == "replicate":
-            self.replicate()
+            return self.replicate()
