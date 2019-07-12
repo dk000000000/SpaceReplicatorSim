@@ -9,8 +9,8 @@ class System(object):
     def sychronize(self):
         #combine all information pick
         #need to finish
-        ProbeBeliefs =[a.system_beliefs for a in self.agents]
-
+        #ProbeBeliefs =[a.system_beliefs for a in self.agents]
+        pass
     def moveout(self,agentid):
         self.agents.pop(agentid)
     def movein(self,agentid):
