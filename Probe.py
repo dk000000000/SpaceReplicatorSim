@@ -11,15 +11,16 @@ class Probe(object):
         # dict of list of position of system represented three number in the cartesian plane they known have been to or other bots have been to
         self.positions = {self.id:[system.position]} #{"1":[(0,0,0)]}
         # dict of n star systems each resource amount and how much the probe belives about the certainty of resource
-        self.system_beliefs = {p:[maxcharge*np.random.normal(self._getDistance(p)),0]for p in galaxy_positions} #{(0.2,0.2,0.2):[20000,0.8]} (0.2,0.2,0.2) position of the system 20000 is quantity of resource, 0.8 is the certainty of the beliefs
+        self.system_beliefs = {p:[maxcharge*np.random.normal(self._getDistance(p)),0] for p in galaxy_positions} #{(0.2,0.2,0.2):[20000,0.8]} (0.2,0.2,0.2) position of the system 20000 is quantity of resource, 0.8 is the certainty of the beliefs
         self.system_beliefs[system.position]=[system.charge,1]#absolutely sure about current system cahrge
-
+        self.galaxy_positions = galaxy_positions
         self.charge = charge # charge/Energy Amount -> 0 - 100
         self.current_position = system.position # star system index in the universe
         self.degradation = degradation #how fast it use resources
         self.recharge_speed = recharge_speed
         self.move_stay_ratio = move_stay_ratio
         self.moving_speed = moving_speed
+        self.system = system
         self.system.movein(self.id)
 
     def _getDistance(self,position1,position2=(0,0,0)):
@@ -58,7 +59,8 @@ class Probe(object):
     def isDead(self):
         return self.dead
 
-    def move(self, new_position):
+    def move(self, id):
+        new_position = self.galaxy_positions[id]
         self.pastPositions[self.id].append(self.position)
         if block ==-1:
             self.destination = new_position
