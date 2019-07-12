@@ -7,7 +7,7 @@ from scipy.spatial.distance import cdist
 
 
 class Galaxy(object):
-    def __init__(self, Nsystems=1000,timelimit=10000,chargeMax=10^6):#number of systems, timelimit for an episode:
+    def __init__(self, Nsystems=1000,timelimit=10000,chargeMax=10**6):#number of systems, timelimit for an episode:
         self.timelimit = timelimit# max numer of time can take
         self.galaxySize = Nsystems
         self.chargeMax = chargeMax
