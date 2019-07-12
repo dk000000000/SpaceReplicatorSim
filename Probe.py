@@ -97,7 +97,7 @@ class Probe(object):
         if action[0] == "stay":
             self.stay()
         elif action[0] == "move":
-            self.move()
+            self.move(action[1])
         elif action[0] == "recharge":
             self.recharge()
         elif action[0] == "replicate":
