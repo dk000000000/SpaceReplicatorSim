@@ -8,7 +8,7 @@ class system(object):
 
     def sychronize(self):
         #combine all information pick
-        return 
+        pass
 
     def record(self):
         pass

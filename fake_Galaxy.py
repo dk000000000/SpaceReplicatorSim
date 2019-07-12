@@ -1,9 +1,5 @@
-import Probe
-import System
-import logging
-import numpy as np
 from GalaxyGeneration import generateDiskGalaxy
-
+import Probe
 
 class Galaxy(object):
     #dictionary of probes
@@ -24,17 +20,21 @@ class Galaxy(object):
         self.probeAct(actionD)
         evaluation = self.evaluate()
         self.ifEnds(evaluation)
-        return probelist,self.ends, evaluation#boolean if is out of time limit
+        return self.probelist, self.ends, evaluation#boolean if is out of time limit
     def evaluate(self):
         return 0
     def isEnds(self,evaluation):
         return evaluation or self.timelimit == self.time+1
     def probeAct(self,actionD):
-        for probeId,action in actionD:
-            self.probelist[probeId].act(actionD)
+        lucky = np.random.choice(1,len(self.systemlist) )
+        system_selecter = 
+        probelist[str(len(self.probelist))] = Probe(self.systemlist[])
+
+
 
     def reset(self): # reset the galaxy, kill everyone
         pass
-
+    def check_block(self,probe):
+        pass
     def render(self): #render what is hapenning in galaxy
         pass

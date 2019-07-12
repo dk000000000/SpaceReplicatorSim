@@ -1,10 +1,11 @@
 from copy import copy, deepcopy
-
+import math
+print(math.ceil(4.2))
 class Probe(object):
 
-    self.block = 0 # boolean if it is blocked
+    self.block = -1 # boolean if it is blocked
     self.dead = False # out of charge
-
+    self.destination = None
     def __init__(self,id,galaxy_positions,system,charge=100,degradation = 0.01,recharge_speed=0.2,move_stay_ratio=2,moving_speed=0.01):
         self.id = id #id of this probe
         # dict of list of position of system represented three number in the cartesian plane they known have been to or other bots have been to
@@ -22,6 +23,9 @@ class Probe(object):
 
     def _getDistance(self,position1,position2=(0,0,0)):
         return np.linalg.norm(np.array(position1)-np.array(position2))
+
+    def _getDirectionVector(self,position2):
+        return (np.array(self.position)-np.array(position2))/self._getDistance(self.position,position2)
 
     def _updateCharge(self, act):
         if act == "recharge": #increase the different between recharge and degreadation
@@ -54,21 +58,48 @@ class Probe(object):
         return self.dead
 
     def move(self, new_position):
-        if block ==0:
-            self.pastPositions.append(self.position)
-            self.position = new_position
-            #calculate number of time step to block
-            block = 1
+        self.pastPositions[self.id].append(self.position)
+        if block ==-1:
+            self.destination = new_position
+            distance = self._getDistance(self.current_position,self.destination)
+            block = math.ceil(distance/self.moving_speed)-1
+            self.position = self.current_position + self._direction_vector(self.destination)
+        elif block == 0:
+            distance = self._getDistance(self.current_position,self.destination)
+            if distance <= self.moving_speed: # last block should have moving speed higher than distance
+                self.position = self.destination
+                self.destination = None
+            block-=1
+        else:
+            self.position = self.current_position + self._direction_vector(self.destination)
+            block-=1
+
         self._updateCharge("move")
 
+
     def replicate(self):
-        self._updateCharge("replicate")
-        ag = copy(self)
-        block = 1
+        if self.block == -1:
+            self._updateCharge("replicate")
+            ag = copy(self)
+            block = 0
+        else:
+            block-=1
+        self.stay()
         return ag
 
     def recharge(self):
         self._updateCharge("recharge")
 
-    def stay(self, index):
+    def stay(self):
         self._updateCharge("stay")
+
+    def act(self, action):
+        if action[0] == "stay":
+            self.stay()
+        elif action[0] == "move":
+            self.move()
+        elif action[0] == "recharge":
+            self.recharge()
+        elif action[0] == "replicate":
+            self.replicate()
+        
