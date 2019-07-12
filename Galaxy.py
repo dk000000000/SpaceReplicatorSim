@@ -24,7 +24,7 @@ class Galaxy(object):
         self._init_sys()
     def _init_sys(self):
         chosen = self.systemlist[0]
-        self.probelist["0"]=Probe("0",self.systemPos,chosen,self.chargeMax,self.systemDict)
+        self.probelist["0"]=Probe("0",self.systemPos,chosen,self.chargeMax,self.systemDict,self.distanceMatrix)
         self.Probecount = 0
 
     def step(self,actionD):

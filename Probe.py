@@ -3,7 +3,7 @@ import math
 import numpy as np
 
 class Probe(object):
-    def __init__(self,id,galaxy_positions,system,maxcharge,galaxy_dict,charge=100,degradation = 0.01,recharge_speed=0.2,move_stay_ratio=2,moving_speed=0.01):
+    def __init__(self,id,galaxy_positions,system,maxcharge,galaxy_dict,dist_matrix,charge=100,degradation = 0.01,recharge_speed=0.2,move_stay_ratio=2,moving_speed=0.01):
         self.block = -1 # boolean if it is blocked
         self.dead = False # out of charge
         self.destination = None
@@ -14,6 +14,7 @@ class Probe(object):
         self.system_beliefs = {p:[maxcharge*np.random.normal(self._getDistance(p)),0] for p in galaxy_positions} #{(0.2,0.2,0.2):[20000,0.8]} (0.2,0.2,0.2) position of the system 20000 is quantity of resource, 0.8 is the certainty of the beliefs
         self.system_beliefs[system.position]=[system.charge,1]#absolutely sure about current system cahrge
         self.galaxy_positions = galaxy_positions
+        self.dist_matrix = dist_matrix
         self.charge = charge # charge/Energy Amount -> 0 - 100
         self.current_position = system.position # star system index in the universe
         self.galaxy_dict = galaxy_dict
@@ -67,7 +68,7 @@ class Probe(object):
             self.destination = new_position
             distance = self._getDistance(self.current_position,self.destination)
             self.block = math.ceil(distance/self.moving_speed)-1
-            self.current_position = self.current_position + self._getDirectionVector(self.destination)
+            self.current_position = tuple(np.array(self.current_position) + self._getDirectionVector(self.destination))
             self.system.moveout(self.id)
         elif self.block == 0:
             distance = self._getDistance(self.current_position,self.destination)
@@ -77,7 +78,7 @@ class Probe(object):
             self.block-=1
             return self.destination
         else:
-            self.current_position = self.current_position + self._getDirectionVector(self.destination)
+            self.current_position = tuple(np.array(self.current_position) + self._getDirectionVector(self.destination))
             self.block-=1
 
         self._updateCharge("move")
