@@ -15,6 +15,7 @@ class Galaxy(object):
         self.time = 0 # current time since the start
         self.ends = False
         self._initSystems()
+        self.Probecount = 0
 
     def _initSystems(self):
         positions,charges = generateDiskGalaxy(self.galaxySize,self.chargeMax)
@@ -35,8 +36,17 @@ class Galaxy(object):
         return evaluation or self.timelimit == self.time+1
     def probeAct(self,actionD):
         for probeId,action in actionD.items():
-            self.probelist[probeId].act(actionD[probeId])
-
+            result = self.probelist[probeId].act(actionD[probeId])
+            if result=="replicate":#replicate
+                replica = deepcopy(self.probelist[probeId])
+                replica.id = self.Probecount
+                replica.system = self.probelist[probeId].system
+                replica.system.movein(replica.id)
+                self.probelist[replica.id] = replica
+                self.Probecount+=1
+            elif result:#move in another galaxy
+                self.probelist[probeId].system = self.systemlist[result]
+                self.probelist[probeId].system.movein(probeId)
     def sychronize(self):
         for position,system in self.systemlist.items():
             system.sychronize()
@@ -47,6 +57,7 @@ class Galaxy(object):
             system.reset()
         chosen = self.systemlist[list(self.systemlist.keys())[0]]
         self.probelist["0"]=Probe("0",list(self.systemlist.keys()),chosen,self.chargeMax)
+        self.Probecount+=1
 
 
     def render(self): #render what is hapenning in galaxy
