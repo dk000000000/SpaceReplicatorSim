@@ -67,21 +67,21 @@ class Probe(object):
         new_position = self.galaxy_positions[id]
         self.positions[self.id].append(self.current_position)
         if self.block ==-1:
-            self.destination = new_position
-            distance = self._getDistance(self.current_position,self.destination)
-            self.block = math.ceil(distance/self.moving_speed)-1
-            self.blockAction = "move"
-            self.current_position = tuple(np.array(self.current_position) + self.moving_speed*self._getDirectionVector(self.destination))
-            self.system.moveout(self.id)
+            if new_position!=self.current_position:
+                self.destination = new_position
+                distance = self._getDistance(self.current_position,self.destination)
+                self.block = math.ceil(distance/self.moving_speed)-2
+                self.blockAction = "move"
+                self.current_position = tuple(np.array(self.current_position) + self.moving_speed*self._getDirectionVector(self.destination))
+                self.system.moveout(self.id)
+            else:
+                self.stay()
         elif self.block == 0:
-            distance = self._getDistance(self.current_position,self.destination)
-            if distance <= self.moving_speed: # last self.block should have moving speed higher than distance
-                self.current_position = self.destination
-                self.destination = None
-
-            self.block-=1
-            self.blockAction = "move"
-            return self.destination
+            self.current_position = self.destination
+            self.destination =None
+            self.block=-1
+            self.blockAction = None
+            return self.current_position
         else:
             self.current_position = tuple(np.array(self.current_position) + self.moving_speed*self._getDirectionVector(self.destination))
             self.block-=1

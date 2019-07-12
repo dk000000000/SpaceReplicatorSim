@@ -50,7 +50,7 @@ class Galaxy(object):
                     self.probelist[replica.id] = replica
                     self.Probecount+=1
                 elif result:#move in another galaxy
-                    self.probelist[probeId].system = self.systemlist[result]
+                    self.probelist[probeId].system = self.systemlist[self.systemDict[result]]
                     self.probelist[probeId].system.movein(probeId)
             else:
                 self.probelist[probeId].act(["stay",0])
