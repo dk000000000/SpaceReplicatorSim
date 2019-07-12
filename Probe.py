@@ -1,12 +1,12 @@
 from copy import copy, deepcopy
 import math
-print(math.ceil(4.2))
-class Probe(object):
+import numpy as np
 
-    self.block = -1 # boolean if it is blocked
-    self.dead = False # out of charge
-    self.destination = None
-    def __init__(self,id,galaxy_positions,system,charge=100,degradation = 0.01,recharge_speed=0.2,move_stay_ratio=2,moving_speed=0.01):
+class Probe(object):
+    def __init__(self,id,galaxy_positions,system,maxcharge,charge=100,degradation = 0.01,recharge_speed=0.2,move_stay_ratio=2,moving_speed=0.01):
+        self.block = -1 # boolean if it is blocked
+        self.dead = False # out of charge
+        self.destination = None
         self.id = id #id of this probe
         # dict of list of position of system represented three number in the cartesian plane they known have been to or other bots have been to
         self.positions = {self.id:[system.position]} #{"1":[(0,0,0)]}
@@ -15,7 +15,7 @@ class Probe(object):
         self.system_beliefs[system.position]=[system.charge,1]#absolutely sure about current system cahrge
 
         self.charge = charge # charge/Energy Amount -> 0 - 100
-        self.current_position = position # star system index in the universe
+        self.current_position = system.position # star system index in the universe
         self.degradation = degradation #how fast it use resources
         self.recharge_speed = recharge_speed
         self.move_stay_ratio = move_stay_ratio
@@ -102,4 +102,3 @@ class Probe(object):
             self.recharge()
         elif action[0] == "replicate":
             self.replicate()
-        
