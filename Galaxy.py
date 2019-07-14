@@ -1,4 +1,4 @@
-from Probe import Probe
+from Replicator import Replicator
 from System import System
 import logging
 import numpy as np
@@ -11,8 +11,8 @@ class Galaxy(object):
         self.timelimit = timelimit# max numer of time can take
         self.galaxySize = Nsystems
         self.chargeMax = chargeMax
-        #dictionary of probes
-        self.probelist = {} # "0":Probe("0")
+        #dictionary of replicators
+        self.replicatorlist = {} # "0":replicator("0")
         self.time = 0 # current time since the start
         self.ends = False
         positions,charges = generateDiskGalaxy(self.galaxySize,self.chargeMax)
@@ -24,43 +24,43 @@ class Galaxy(object):
         self._init_sys()
     def _init_sys(self):
         chosen = self.systemlist[0]
-        self.probelist["0"]=Probe("0",self.systemPos,chosen,self.chargeMax,self.systemDict,self.distanceMatrix)
-        self.Probecount = 0
+        self.replicatorlist["0"]=Replicator("0",self.systemPos,chosen,self.chargeMax,self.systemDict,self.distanceMatrix)
+        self.replicatorcount = 0
 
     def step(self,actionD):
-        #dictionary of action increment self.time and will return false self.timelimit is met, check_block() to block probe to act if it is blocked
-        self.probeAct(actionD)
+        #dictionary of action increment self.time and will return false self.timelimit is met, check_block() to block replicator to act if it is blocked
+        self.replicatorAct(actionD)
         self.sychronize()
         evaluation = self.evaluate()
         self.ifEnds(evaluation)
-        return self.probelist,self.ends, evaluation#boolean if is out of time limit
+        return self.replicatorlist,self.ends, evaluation#boolean if is out of time limit
     def evaluate(self):
         return 0
     def ifEnds(self,evaluation):
         return evaluation or self.timelimit == self.time+1
-    def probeAct(self,actionD):
-        for probeId,_ in self.probelist.items():
-            if probeId in actionD or self.probelist[probeId].blockAction:
-                result = self.probelist[probeId].act(actionD[probeId])
+    def replicatorAct(self,actionD):
+        for replicatorId,_ in self.replicatorlist.items():
+            if replicatorId in actionD or self.replicatorlist[replicatorId].blockAction:
+                result = self.replicatorlist[replicatorId].act(actionD[replicatorId])
                 if result=="replicate":#replicate
-                    replica = deepcopy(self.probelist[probeId])
-                    replica.id = self.Probecount
-                    replica.system = self.probelist[probeId].system
+                    replica = deepcopy(self.replicatorlist[replicatorId])
+                    replica.id = self.replicatorcount
+                    replica.system = self.replicatorlist[replicatorId].system
                     replica.system.movein(replica.id)
-                    self.probelist[replica.id] = replica
-                    self.Probecount+=1
+                    self.replicatorlist[replica.id] = replica
+                    self.replicatorcount+=1
                 elif result:#move in another galaxy
-                    self.probelist[probeId].system = self.systemlist[self.systemDict[result]]
-                    self.probelist[probeId].system.movein(probeId)
+                    self.replicatorlist[replicatorId].system = self.systemlist[self.systemDict[result]]
+                    self.replicatorlist[replicatorId].system.movein(replicatorId)
             else:
-                self.probelist[probeId].act(["stay",0])
+                self.replicatorlist[replicatorId].act(["stay",0])
 
     def sychronize(self):
         for _,system in self.systemlist.items():
             system.sychronize()
 
     def reset(self): # reset the galaxy, kill everyone
-        self.probelist = {}
+        self.replicatorlist = {}
         for key,system in self.systemlist:
             system.reset()
         self._init_sys()
