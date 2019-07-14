@@ -8,3 +8,5 @@ link:[link to presentation](https://docs.google.com/presentation/d/1rKx5YG6DVTs6
 
 ## description
 This is a simulator
+
+SIGEVO 2019 SUMMER SCHOOL
