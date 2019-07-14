@@ -1,12 +1,7 @@
-# von-neumann-probe-simulator
+# Space Replicator Simulator
 
-Simulator:Jieming Ji,Mohamed Amine EL MAJDOULI<br>
-Visualization:Pankhuri Singhal<br>
-Optimization and evolutionary strategy:Simon Mandlik,Tomas Palecek,?<br>
-mentor:Mike Preuss<br>
-link:[link to presentation](https://docs.google.com/presentation/d/1rKx5YG6DVTs6ZK8QAZjfUX-YmXDrHaOEcKLxzskACn4/edit#slide=id.p4)
+Simulator and visualizaion:Jieming Ji
 
 ## description
-This is a simulator
-
-SIGEVO 2019 SUMMER SCHOOL
+This is a simulator in development with visualization.
+Future will be compatible with openai gym with sphix generated documentation
